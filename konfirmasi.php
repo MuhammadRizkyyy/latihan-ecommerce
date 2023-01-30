@@ -1,6 +1,20 @@
 <?php
 include "functions/functions.php";
 
+$result = mysqli_query($conn, "SELECT status FROM tb_pembelian");
+$row = mysqli_fetch_assoc($result);
+$status = $row["status"];
+
+if( isset($_POST["cek"]) ) {
+    $kodepembayaran = $_POST["kodepembayaran"];
+
+    header("Location: konfirmasi.php?kode=".$kodepembayaran);
+
+    
+
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -15,27 +29,80 @@ include "functions/functions.php";
 </head>
 <body>
     
-    <nav class="navbar navbar-expand-lg bg-info">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Toko Printer</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="produk.php">Home</a>
-                <a class="nav-link active" href="#">Features</a>
-                <a class="nav-link active" href="#">Pricing</a>
-            </div>
-            </div>
-        </div>
-    </nav>
-
-    
-    
+    <?php include "template/navbar.php"; ?>
 
     <div class="container">
-        
+        <div class="row justify-content-center my-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-info">Konfirmasi Pembayaran</div>
+                    <div class="card-body">
+                        <form action="" method="post">
+                            <label>Kode Pembayaran</label>
+                            <input type="text" name="kodepembayaran" class="form-control"><br>
+                            <button type="submit" class="btn btn-primary" name="cek">Cek</button>
+                        </form>
+                    </div>
+                </div>
+
+                <?php if(isset($_GET["kode"])) : ?>
+                <div class="card mt-5">
+                    <div class="card-header">Konfirmasi Pembayaran</div>
+                    <div class="card-body">
+                        <h1 class="text-center">
+                            <?php 
+                                if(isset($_GET["kode"])) {
+                                    $kode = $_GET["kode"];
+                                    $result = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.kode_pembayaran = '$kode'");
+
+                                }
+                                $row = mysqli_fetch_assoc($result);
+                                $status = $row["status"];
+                            ?>
+                            <?php if($status == 0): ?>
+                                <i class="bi bi-x-lg text-danger"></i> Belum dibayar
+                            <?php elseif($status == 1): ?>
+                                <i class="bi bi-check-circle text-success"></i> Sudah dibayar
+                            <?php endif; ?>
+                        </h1>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Produk</th>
+                                    <th>Kode Pembayaran</th>
+                                </tr>
+                                    <?php  
+                                    if(isset($_GET["kode"])) {
+                                        $kode = $_GET["kode"];
+                                        $result = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.kode_pembayaran = '$kode'");
+
+                                        $result2 = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.id_produk = pro.id_produk");
+
+                                    }
+
+                                    $row = mysqli_fetch_assoc($result);
+                                    $row2 = mysqli_fetch_assoc($result2);
+                                    ?>
+                                    <tr>
+                                        <td><?= $row["nama"]; ?></td>
+                                        <td><?= $row2["judul_produk"]; ?></td>
+                                        <td><?= $row["kode_pembayaran"]; ?></td>
+                                    </tr>
+                            </table>
+                        </div>
+                        <p><b>Total Pembayaran Anda: <?= "Rp " . number_format($row2["harga"],0,',','.'); ?></b></p>
+                        <p class="text-danger">Silahkan kirim bukti Pembayaran di bawah ini.</p>
+                        <p>Upload foto bukti pembayaran</p>
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <input type="file" name="bukti_pembayaran" class="form-control"><br>
+                            <button type="submit" class="btn btn-primary" name="btnbukti">Kirim</button>
+                        </form>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
 

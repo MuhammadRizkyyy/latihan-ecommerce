@@ -46,6 +46,7 @@ function upload() {
     $nama_file_baru = uniqid();
     $nama_file_baru .= ".";
     $nama_file_baru .= $ekstensi_file;
+    // var_dump($nama_file_baru); die;
 
     move_uploaded_file($tmp_file, "assets/img/" . $nama_file_baru);
 
@@ -117,12 +118,23 @@ if( isset($_POST["checkout"]) ) {
 
 
 
-    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran) VALUES ('$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran')");
+    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran, status) VALUES ('$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran', 0)");
 
     if($result) {
         header("Location: struk.php?beli="."$id");
     }
 
+}
+
+// upload bukti pembayaran
+if( isset($_POST["btnbukti"]) ) {
+    $bukti_pembayaran = upload();
+
+    $result = mysqli_query($conn, "INSERT INTO tb_pembayaran (bukti, status) VALUES ('$bukti_pembayaran', 1)");
+
+    if($result) {
+        header("Location: konfirmasi.php");
+    }
 }
 
 
