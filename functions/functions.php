@@ -46,7 +46,6 @@ function upload() {
     $nama_file_baru = uniqid();
     $nama_file_baru .= ".";
     $nama_file_baru .= $ekstensi_file;
-    // var_dump($nama_file_baru); die;
 
     move_uploaded_file($tmp_file, "assets/img/" . $nama_file_baru);
 
@@ -62,7 +61,7 @@ if( isset($_POST["btntambahproduk"]) ) {
     $stok = $_POST["stok"];
     $gambar = upload();
 
-    $result = mysqli_query($conn, "INSERT INTO tb_produk (id, judul_produk, harga, stok, deskripsi, gambar) VALUES (NULL, '$title_produk', '$harga', '$stok', '$deskripsi', '$gambar')");
+    $result = mysqli_query($conn, "INSERT INTO tb_produk (judul_produk, harga, stok, deskripsi, gambar) VALUES ('$title_produk', '$harga', '$stok', '$deskripsi', '$gambar')");
 
     if($result) {
         $error = "BERHASIL MELAKUKAN TAMBAH PRODUK";
@@ -75,7 +74,7 @@ if( isset($_POST["btntambahproduk"]) ) {
 if( isset($_POST["btnhapusproduk"]) ) {
     $id = $_POST["idproduk"];
 
-    $result = mysqli_query($conn, "DELETE FROM tb_produk WHERE id = $id");
+    $result = mysqli_query($conn, "DELETE FROM tb_produk WHERE id_produk = $id");
 
     if($result) {
         header("Location: produk.php");
@@ -91,7 +90,7 @@ if( isset($_POST["btneditproduk"]) ){
     $stok = $_POST["stok"];
     $gambar = upload();
 
-    $result = mysqli_query($conn, "UPDATE tb_produk SET judul_produk = '$title_produk', harga = '$harga', stok = '$stok', gambar = '$gambar'  WHERE id = $id");
+    $result = mysqli_query($conn, "UPDATE tb_produk SET judul_produk = '$title_produk', harga = '$harga', stok = '$stok', gambar = '$gambar'  WHERE id_produk = $id");
 
     if($result) {
         header("Location: produk.php");
@@ -102,7 +101,7 @@ if( isset($_POST["btneditproduk"]) ){
 // tambah form pembelian
 if(isset($_GET["beli"])) {
     $id = $_GET["beli"];
-    $query = mysqli_query($conn, "SELECT * FROM tb_produk WHERE id = $id");
+    $query = mysqli_query($conn, "SELECT * FROM tb_produk WHERE id_produk = $id");
 }
 
 if( isset($_POST["checkout"]) ) {
@@ -128,9 +127,19 @@ if( isset($_POST["checkout"]) ) {
 
 // upload bukti pembayaran
 if( isset($_POST["btnbukti"]) ) {
-    $bukti_pembayaran = upload();
+    $direktori = "assets/bukti/";
+    $file_name = $_FILES["bukti_pembayaran"]["name"];
+    
+    $ekstensi_file = explode(".", $file_name);
+    $ekstensi_file = strtolower(end($ekstensi_file));
 
-    $result = mysqli_query($conn, "INSERT INTO tb_pembayaran (bukti, status) VALUES ('$bukti_pembayaran', 1)");
+    $nama_file_baru = uniqid();
+    $nama_file_baru .= ".";
+    $nama_file_baru .= $ekstensi_file;
+
+    move_uploaded_file($_FILES["bukti_pembayaran"]["tmp_name"], $direktori.$nama_file_baru);
+
+    $result = mysqli_query($conn, "INSERT INTO tb_pembayaran (bukti, status) VALUES ('$nama_file_baru', 1)");
 
     if($result) {
         header("Location: konfirmasi.php");

@@ -77,7 +77,7 @@ if( isset($_POST["cek"]) ) {
                                         $kode = $_GET["kode"];
                                         $result = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.kode_pembayaran = '$kode'");
 
-                                        $result2 = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.id_produk = pro.id_produk");
+                                        $result2 = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.id_produk = pro.id_produk ORDER BY pem.id DESC LIMIT 1");
 
                                     }
 

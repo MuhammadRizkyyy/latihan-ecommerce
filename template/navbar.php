@@ -9,6 +9,7 @@
                 <a class="nav-link active" aria-current="page" href="produk.php">Home</a>
                 <a class="nav-link active" href="konfirmasi.php">Konfirmasi</a>
                 <a class="nav-link active" href="#">Pricing</a>
+                <a class="nav-link active" href="konfirmasi_pembayaran_admin.php">Konfirmasi Pembayaran</a>
             </div>
             </div>
         </div>
