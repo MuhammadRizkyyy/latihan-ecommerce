@@ -34,7 +34,7 @@ include "functions/functions.php";
                 <p class="text-center">BCA kode bank: 006</p><hr>
 
                 <?php 
-                  $result = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.id_produk = pro.id_produk ORDER BY pem.id DESC LIMIT 1");
+                  $result = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.id_produk = pro.id_produk ORDER BY pem.idpembelian DESC LIMIT 1");
                   $row = mysqli_fetch_assoc($result);
                   
                 ?>

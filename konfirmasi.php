@@ -1,20 +1,18 @@
 <?php
 include "functions/functions.php";
-
-$result = mysqli_query($conn, "SELECT status FROM tb_pembelian");
-$row = mysqli_fetch_assoc($result);
-$status = $row["status"];
+error_reporting(E_ERROR);
 
 if( isset($_POST["cek"]) ) {
     $kodepembayaran = $_POST["kodepembayaran"];
 
     header("Location: konfirmasi.php?kode=".$kodepembayaran);
-
-    
-
 }
 
+$kode = $_GET['kode'];
 
+$result = mysqli_query($conn, "SELECT * FROM `tb_pembelian` INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian WHERE tb_pembelian.kode_pembayaran='$kode'");
+$data = mysqli_fetch_assoc($result);
+$status = $data['status'];
 ?>
 
 <!DOCTYPE html>
@@ -50,18 +48,9 @@ if( isset($_POST["cek"]) ) {
                     <div class="card-header">Konfirmasi Pembayaran</div>
                     <div class="card-body">
                         <h1 class="text-center">
-                            <?php 
-                                if(isset($_GET["kode"])) {
-                                    $kode = $_GET["kode"];
-                                    $result = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.kode_pembayaran = '$kode'");
-
-                                }
-                                $row = mysqli_fetch_assoc($result);
-                                $status = $row["status"];
-                            ?>
-                            <?php if($status == 0): ?>
+                            <?php if(is_null($status) || $status == 1): ?>
                                 <i class="bi bi-x-lg text-danger"></i> Belum dibayar
-                            <?php elseif($status == 1): ?>
+                            <?php elseif($status == 2): ?>
                                 <i class="bi bi-check-circle text-success"></i> Sudah dibayar
                             <?php endif; ?>
                         </h1>
@@ -75,38 +64,39 @@ if( isset($_POST["cek"]) ) {
                                     <?php  
                                     if(isset($_GET["kode"])) {
                                         $kode = $_GET["kode"];
-                                        $result = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.kode_pembayaran = '$kode'");
-
-                                        $result2 = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.id_produk = pro.id_produk ORDER BY pem.id DESC LIMIT 1");
-
+                                        $result = mysqli_query($conn, "SELECT * FROM `tb_pembelian` INNER JOIN tb_produk ON tb_pembelian.id_produk = tb_produk.id_produk WHERE kode_pembayaran = '$kode'");
                                     }
 
                                     $row = mysqli_fetch_assoc($result);
-                                    $row2 = mysqli_fetch_assoc($result2);
+
+                                    if(is_null($row)) {
+                                        header("Location:konfirmasi.php");
+                                     }
+
                                     ?>
                                     <tr>
                                         <td><?= $row["nama"]; ?></td>
-                                        <td><?= $row2["judul_produk"]; ?></td>
+                                        <td><?= $row["judul_produk"]; ?></td>
                                         <td><?= $row["kode_pembayaran"]; ?></td>
                                     </tr>
                             </table>
                         </div>
-                        <p><b>Total Pembayaran Anda: <?= "Rp " . number_format($row2["harga"],0,',','.'); ?></b></p>
+                        <?php if($status != 2): ?>
+                        <p><b>Total Pembayaran Anda: <?= "Rp " . number_format($row["harga"],0,',','.'); ?></b></p>
                         <p class="text-danger">Silahkan kirim bukti Pembayaran di bawah ini.</p>
                         <p>Upload foto bukti pembayaran</p>
                         <form action="" method="post" enctype="multipart/form-data">
                             <input type="file" name="bukti_pembayaran" class="form-control"><br>
+                            <input type="hidden" name="idpembelian" value="<?= $row["idpembelian"]; ?>">
                             <button type="submit" class="btn btn-primary" name="btnbukti">Kirim</button>
                         </form>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php endif; ?>
             </div>
         </div>
     </div>
-
-
-
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 
 </body>

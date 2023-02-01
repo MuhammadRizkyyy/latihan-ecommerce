@@ -117,7 +117,7 @@ if( isset($_POST["checkout"]) ) {
 
 
 
-    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran, status) VALUES ('$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran', 0)");
+    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran, status) VALUES ('$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran', 1)");
 
     if($result) {
         header("Location: struk.php?beli="."$id");
@@ -127,6 +127,7 @@ if( isset($_POST["checkout"]) ) {
 
 // upload bukti pembayaran
 if( isset($_POST["btnbukti"]) ) {
+    $idpembelian = $_POST["idpembelian"];
     $direktori = "assets/bukti/";
     $file_name = $_FILES["bukti_pembayaran"]["name"];
     
@@ -139,12 +140,23 @@ if( isset($_POST["btnbukti"]) ) {
 
     move_uploaded_file($_FILES["bukti_pembayaran"]["tmp_name"], $direktori.$nama_file_baru);
 
-    $result = mysqli_query($conn, "INSERT INTO tb_pembayaran (bukti, status) VALUES ('$nama_file_baru', 1)");
+    $result = mysqli_query($conn, "INSERT INTO tb_pembayaran (idpembelian, bukti, status) VALUES ($idpembelian, '$nama_file_baru', 1)");
 
     if($result) {
         header("Location: konfirmasi.php");
     }
 }
+
+if( isset($_POST["verifikasi"]) ) {
+    $idpembelian = $_POST["idpembelian"];
+    $result = mysqli_query($conn, "UPDATE tb_pembayaran, tb_pembelian SET tb_pembayaran.status = 2, tb_pembelian.status = 2 WHERE tb_pembayaran.idpembelian = $idpembelian");
+
+    if($result) {
+        header("Location: konfirmasi_pembayaran_admin.php");
+    }
+}
+
+
 
 
 ?>
