@@ -1,3 +1,12 @@
+<?php 
+$super_user = false;
+if( isset($_SESSION["name"]) ) {
+    $user = true;
+  if( cek_status($_SESSION["name"]) == 1 ) {
+    $super_user = true;
+  }
+}
+?>
 <nav class="navbar navbar-expand-lg bg-info">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Toko Printer</a>

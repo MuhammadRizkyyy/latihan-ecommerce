@@ -142,7 +142,7 @@ if( isset($_POST["btnbukti"]) ) {
 
     $result = mysqli_query($conn, "INSERT INTO tb_pembayaran (idpembelian, bukti, status) VALUES ($idpembelian, '$nama_file_baru', 1)");
 
-    $result2 = mysqli_query($conn, "UPDATE tb_pembayaran, tb_pembelian SET tb_pembelian.status = 1 WHERE tb_pembayaran.status = 1");
+    $result2 = mysqli_query($conn, "UPDATE tb_pembelian INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian SET tb_pembelian.status = 1 WHERE tb_pembayaran.status = 1");
 
     if($result) {
         header("Location: konfirmasi.php");
@@ -151,7 +151,7 @@ if( isset($_POST["btnbukti"]) ) {
 
 if( isset($_POST["verifikasi"]) ) {
     $idpembelian = $_POST["idpembelian"];
-    $result = mysqli_query($conn, "UPDATE tb_pembayaran, tb_pembelian SET tb_pembayaran.status = 2, tb_pembelian.status = 2 WHERE tb_pembayaran.idpembelian = $idpembelian");
+    $result = mysqli_query($conn, "UPDATE tb_pembelian INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian SET tb_pembelian.status = 2, tb_pembayaran.status = 2 WHERE tb_pembayaran.idpembelian = $idpembelian");
 
     if($result) {
         header("Location: konfirmasi_pembayaran_admin.php");
