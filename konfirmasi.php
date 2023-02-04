@@ -48,7 +48,7 @@ $status = $data['status'];
                     <div class="card-header">Konfirmasi Pembayaran</div>
                     <div class="card-body">
                         <h1 class="text-center">
-                            <?php if(is_null($status) || $status == 1): ?>
+                            <?php if(is_null($status) || $status == 1 || $status == 0): ?>
                                 <i class="bi bi-x-lg text-danger"></i> Belum dibayar
                             <?php elseif($status == 2): ?>
                                 <i class="bi bi-check-circle text-success"></i> Sudah dibayar
@@ -83,6 +83,7 @@ $status = $data['status'];
                         </div>
                         <?php if($status != 2): ?>
                         <p><b>Total Pembayaran Anda: <?= "Rp " . number_format($row["harga"],0,',','.'); ?></b></p>
+                        <?php if($status != 1): ?>
                         <p class="text-danger">Silahkan kirim bukti Pembayaran di bawah ini.</p>
                         <p>Upload foto bukti pembayaran</p>
                         <form action="" method="post" enctype="multipart/form-data">
@@ -90,6 +91,7 @@ $status = $data['status'];
                             <input type="hidden" name="idpembelian" value="<?= $row["idpembelian"]; ?>">
                             <button type="submit" class="btn btn-primary" name="btnbukti">Kirim</button>
                         </form>
+                        <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>

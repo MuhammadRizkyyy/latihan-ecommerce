@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 $conn = mysqli_connect("localhost", "root", "", "db_latihan") or die("gagal koneksi");
 $error = "";
 
@@ -117,7 +117,7 @@ if( isset($_POST["checkout"]) ) {
 
 
 
-    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran, status) VALUES ('$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran', 1)");
+    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran, status) VALUES ('$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran', 0)");
 
     if($result) {
         header("Location: struk.php?beli="."$id");
@@ -142,6 +142,8 @@ if( isset($_POST["btnbukti"]) ) {
 
     $result = mysqli_query($conn, "INSERT INTO tb_pembayaran (idpembelian, bukti, status) VALUES ($idpembelian, '$nama_file_baru', 1)");
 
+    $result2 = mysqli_query($conn, "UPDATE tb_pembayaran, tb_pembelian SET tb_pembelian.status = 1 WHERE tb_pembayaran.status = 1");
+
     if($result) {
         header("Location: konfirmasi.php");
     }
@@ -156,7 +158,54 @@ if( isset($_POST["verifikasi"]) ) {
     }
 }
 
+function register($data) {
+    global $conn;
 
+    $username = mysqli_real_escape_string($conn, $data["username"]);
+    $password = mysqli_real_escape_string($conn, $data["password"]);
+    $confirmpass = mysqli_real_escape_string($conn, $data["confirm_pass"]);
+
+    // cek username sudah ada atau belum
+    $result = mysqli_query($conn, "SELECT username FROM tb_user WHERE username = '$username'");
+
+    if( mysqli_fetch_assoc($result) ) {
+        echo "<script>
+            alert('Sudah ada username yang terdaftar');
+        </script";
+        return false;
+    }
+
+    // cek apakah password sama dengan konfimasi password
+    if( $password != $confirmpass ) {
+        echo "<script>
+            alert('Password tidak sama dengan konfirmasi password');
+        </script";
+        return false;
+    }
+
+    // enkripsi password
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    // masukkan ke database
+    mysqli_query($conn, "INSERT INTO tb_user (username, password, status) VALUES ('$username', '$password', 0)");
+
+    return mysqli_affected_rows($conn);
+
+}
+
+function cek_status($username) {
+    global $conn;
+  
+    $name = mysqli_escape_string($conn, $username);
+    $query = "SELECT status FROM tb_user WHERE username = '$name'";
+  
+    if( $result = mysqli_query($conn, $query) ) {
+      while( $row = mysqli_fetch_assoc($result) ) {
+        $status = $row["status"];
+      }
+    }
+    return $status;
+  }
 
 
 ?>

@@ -24,16 +24,20 @@ require "functions/functions.php";
     <div class="table-responsive">
       <table class="table table-bordered">
         <tr>
+          <th>Nama</th>
+          <th>Kode Pembayaran</th>
           <th width="20%">Bukti</th>
           <th width="30%">Aksi</th>
         </tr>
         <?php 
-        $result = mysqli_query($conn, "SELECT * FROM tb_pembayaran WHERE status = 1");
+        $result = mysqli_query($conn, "SELECT * FROM `tb_pembayaran` INNER JOIN tb_pembelian ON tb_pembayaran.idpembelian = tb_pembelian.idpembelian WHERE tb_pembayaran.status = 1");
 
         while($row = mysqli_fetch_assoc($result)): 
         ?>
         <tr>
           <form action="" method="post">
+            <td><?= $row["nama"]; ?></td>
+            <td><?= $row["kode_pembayaran"]; ?></td>
             <td><img src="assets/bukti/<?= $row["bukti"] ?>" class="card-img-top"></td>
             <td>
               <button type="submit" name="verifikasi" class="btn btn-success">Verifikasi</button>

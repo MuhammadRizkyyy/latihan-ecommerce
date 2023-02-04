@@ -1,6 +1,18 @@
 <?php
 include "functions/functions.php";
 
+if( !isset($_SESSION["login"]) ) {
+    header("Location: index.php");
+}
+
+$super_user = false;
+if( isset($_SESSION["name"]) ) {
+    $user = true;
+  if( cek_status($_SESSION["name"]) == 1 ) {
+    $super_user = true;
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -21,11 +33,13 @@ include "functions/functions.php";
     
 
     <div class="container">
-        <h3>Tambah Produk</h3>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahproduk">
-        Tambah Produk
-        </button>
+        <?php if($super_user == true): ?>
+            <h3>Tambah Produk</h3>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahproduk">
+            Tambah Produk
+            </button>
+        <?php endif; ?>
 
         <h5><?= $error; ?></h5>
 
@@ -45,12 +59,19 @@ include "functions/functions.php";
                     <div class="card-body">
                         <h5 class="card-title"><a href="detail.php?detail=<?= $id ?>"><?= $produk ?></a></h5>
                         <p class="card-text"><?= "Rp " . number_format($harga,0,',','.'); ?></p>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusproduk<?= $id ?>">
-                        <i class="bi bi-trash-fill"></i>
-                        </button>
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editproduk<?= $id ?>">
-                        <i class="bi bi-pencil-square"></i>
-                        </button>
+
+                        <?php if($super_user == true): ?>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusproduk<?= $id ?>">
+                            <i class="bi bi-trash-fill"></i>
+                            </button>
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editproduk<?= $id ?>">
+                            <i class="bi bi-pencil-square"></i>
+                            </button>
+                        <?php endif; ?>
+                        
+                        <?php if($super_user == false): ?>
+                            <a href="detail.php?detail=<?= $id ?>" class="btn btn-primary">Beli</a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
