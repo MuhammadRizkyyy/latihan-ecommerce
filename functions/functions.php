@@ -110,6 +110,7 @@ if( isset($_POST["checkout"]) ) {
     $kodepos = $_POST["kodepos"];
     $alamat = $_POST["alamat"];
     $pengiriman = $_POST["pengiriman"];
+    $qty = $_POST["qty"];
 
     $query = mysqli_query($conn, "SELECT * FROM tb_pembelian");
     $rows = mysqli_num_rows($query)+1;
@@ -117,7 +118,7 @@ if( isset($_POST["checkout"]) ) {
 
 
 
-    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran, status) VALUES ('$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran', 0)");
+    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran, qty, status) VALUES ('$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran', $qty, 0)");
 
     if($result) {
         header("Location: struk.php?beli="."$id");

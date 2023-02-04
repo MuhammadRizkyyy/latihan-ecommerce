@@ -68,6 +68,9 @@ $status = $data['status'];
                                     }
 
                                     $row = mysqli_fetch_assoc($result);
+                                    $harga = $row["harga"];
+                                    $qty = $row["qty"];
+                                    $total = $harga * $qty;
 
                                     if(is_null($row)) {
                                         header("Location:konfirmasi.php");
@@ -82,7 +85,7 @@ $status = $data['status'];
                             </table>
                         </div>
                         <?php if($status != 2): ?>
-                        <p><b>Total Pembayaran Anda: <?= "Rp " . number_format($row["harga"],0,',','.'); ?></b></p>
+                        <p><b>Total Pembayaran Anda: <?= "Rp " . number_format($total,0,',','.'); ?></b></p>
                         <?php if($status != 1): ?>
                         <p class="text-danger">Silahkan kirim bukti Pembayaran di bawah ini.</p>
                         <p>Upload foto bukti pembayaran</p>

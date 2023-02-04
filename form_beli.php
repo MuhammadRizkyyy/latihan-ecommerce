@@ -62,6 +62,10 @@ if( !isset($_SESSION["login"]) ) {
               <input type="text" name="alamat" class="form-control" required>
             </div>
             <div class="col-md-4">
+              <label>Jumlah Pembelian</label>
+              <input type="number" name="qty" class="form-control" required>
+            </div>
+            <div class="col-md-4">
               <label>Jasa Pengiriman</label>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="pengiriman" value="JNE" id="jne"> <label for="jne">JNE</label>
@@ -76,7 +80,7 @@ if( !isset($_SESSION["login"]) ) {
               <?php
                 $result = mysqli_query($conn, "SELECT * FROM tb_produk WHERE id = $id");
               ?>
-              <!-- <a href="struk.php?struk= //$id " class="btn btn-primary my-3" name="checkout">Checkout</a> -->
+              <br>
               <button type="submit" name="checkout" class="btn btn-primary">Checkout</button>
           </form>
         </div>

@@ -40,10 +40,13 @@ if( !isset($_SESSION["login"]) ) {
                 <?php 
                   $result = mysqli_query($conn, "SELECT * FROM tb_pembelian AS pem, tb_produk AS pro WHERE pem.id_produk = pro.id_produk ORDER BY pem.idpembelian DESC LIMIT 1");
                   $row = mysqli_fetch_assoc($result);
+                  $harga = $row["harga"];
+                  $qty = $row["qty"];
+                  $total = $harga * $qty;
                   
                 ?>
                 <h5 class="text-center">Total yang harus dibayar</h5>
-                <h2 class="text-center"><?= "Rp " . number_format($row["harga"],0,',','.'); ?></h2><hr>
+                <h2 class="text-center"><?= "Rp " . number_format($total,0,',','.'); ?></h2><hr>
 
                 <h5 class="text-center">Kode Pembayaran</h5>
                 <h2 class="text-center"><?= $row["kode_pembayaran"]; ?></h2>
