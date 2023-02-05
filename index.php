@@ -18,6 +18,7 @@ if( isset($_POST["submit"]) ) {
     if( password_verify($password, $row["password"]) ) {
       $_SESSION["login"] = true;
       $_SESSION["name"] = $username;
+      $_SESSION["id_user"] = $row["id_user"];
       header("Location: produk.php");
     }
   }

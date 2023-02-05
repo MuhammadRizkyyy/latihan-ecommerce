@@ -111,6 +111,7 @@ if( isset($_POST["checkout"]) ) {
     $alamat = $_POST["alamat"];
     $pengiriman = $_POST["pengiriman"];
     $qty = $_POST["qty"];
+    $iduser = $_POST["iduser"];
 
     $query = mysqli_query($conn, "SELECT * FROM tb_pembelian");
     $rows = mysqli_num_rows($query)+1;
@@ -130,21 +131,23 @@ if( isset($_POST["checkout"]) ) {
         $updatestokmasuk = mysqli_query($conn, "UPDATE tb_produk SET stok = $kurangkanstoksekarangdenganqty WHERE id_produk = $id");
     
     
-        if($result) {
-            header("Location: struk.php?beli="."$id");
-        }
     } else {
         echo "
         <script>
-            alert('Maaf stok tidak mencukupi');
+        alert('Maaf stok tidak mencukupi');
             window.location.href = 'form_beli.php?beli={$id}';
-        </script>
-        ";
+            </script>
+            ";
         die;
     }
+    
+    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_user, id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran, qty, status) VALUES ('$iduser', '$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran', $qty, 0)");
 
-    $result = mysqli_query($conn, "INSERT INTO tb_pembelian (id_produk, nama, no_ktp, kode_pos, alamat, jasa_pengiriman, kode_pembayaran, qty, status) VALUES ('$id', '$nama', '$noktp', '$kodepos', '$alamat', '$pengiriman', '$kode_pembayaran', $qty, 0)");
-
+    var_dump($result);
+    
+    if($result) {
+        header("Location: struk.php?beli="."$id");
+    }
 }
 
 // upload bukti pembayaran

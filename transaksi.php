@@ -1,7 +1,11 @@
 <?php 
-require "functions/functions.php" ;
+require "functions/functions.php";
 
-$result = mysqli_query($conn, "SELECT * FROM `tb_pembelian` INNER JOIN tb_produk ON tb_pembelian.id_produk = tb_produk.id_produk");
+$id_user = $_SESSION["id_user"];
+$username = $_SESSION["name"];
+
+$result = mysqli_query($conn, "SELECT * FROM `tb_pembelian` INNER JOIN tb_produk ON tb_pembelian.id_produk = tb_produk.id_produk WHERE id_user = '$id_user' ORDER BY idpembelian DESC");
+
 
 ?>
 <!DOCTYPE html>

@@ -79,8 +79,13 @@ if( !isset($_SESSION["login"]) ) {
             </div>
               <?php
                 $result = mysqli_query($conn, "SELECT * FROM tb_produk WHERE id = $id");
+
+                $name = $_SESSION["name"];
+                $ambiliduser = mysqli_query($conn, "SELECT id_user FROM tb_user WHERE username = '$name'");
+                $data = mysqli_fetch_assoc($ambiliduser);
               ?>
               <br>
+              <input type="hidden" name="iduser" value="<?= $data["id_user"]; ?>">
               <button type="submit" name="checkout" class="btn btn-primary">Checkout</button>
           </form>
         </div>
