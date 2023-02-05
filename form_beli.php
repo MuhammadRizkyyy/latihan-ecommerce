@@ -68,13 +68,13 @@ if( !isset($_SESSION["login"]) ) {
             <div class="col-md-4">
               <label>Jasa Pengiriman</label>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="pengiriman" value="JNE" id="jne"> <label for="jne">JNE</label>
+                <input class="form-check-input" type="radio" name="pengiriman" value="JNE" id="jne" required> <label for="jne">JNE</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="pengiriman" value="J&T" id="jnt"> <label for="jnt">J&T</label>
+                <input class="form-check-input" type="radio" name="pengiriman" value="J&T" id="jnt" required> <label for="jnt">J&T</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="pengiriman" value="Sicepat" id="sicepat"> <label for="sicepat">Sicepat</label>
+                <input class="form-check-input" type="radio" name="pengiriman" value="Sicepat" id="sicepat" required> <label for="sicepat">Sicepat</label>
               </div>
             </div>
               <?php
