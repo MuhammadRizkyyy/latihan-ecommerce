@@ -33,6 +33,9 @@ require "functions/functions.php";
         $result = mysqli_query($conn, "SELECT * FROM `tb_pembayaran` INNER JOIN tb_pembelian ON tb_pembayaran.idpembelian = tb_pembelian.idpembelian WHERE tb_pembayaran.status = 1");
 
         while($row = mysqli_fetch_assoc($result)): 
+          $idpembelian = $row["idpembelian"];
+          $idproduk = $row["id_produk"];
+          $qty = $row["qty"];
         ?>
         <tr>
           <form action="" method="post">
@@ -40,11 +43,52 @@ require "functions/functions.php";
             <td><?= $row["kode_pembayaran"]; ?></td>
             <td><img src="assets/bukti/<?= $row["bukti"] ?>" class="card-img-top"></td>
             <td>
-              <button type="submit" name="verifikasi" class="btn btn-success">Verifikasi</button>
+              <!-- <button type="submit" name="verifikasi" class="btn btn-success">Konfirmasi</button> -->
+              <button type="button" class="btn btn-success my-2" data-bs-toggle="modal" data-bs-target="#konfirmasi<?= $idpembelian; ?>">Konfirmasi</button>
+              <button type="button" class="btn btn-danger my-2" data-bs-toggle="modal" data-bs-target="#tolak<?= $idpembelian; ?>">Tolak</button>
             </td>
-            <input type="hidden" name="idpembelian" value="<?= $row["idpembelian"]; ?>">
           </form>
         </tr>
+
+        <!-- modal konfirmasi -->
+        <div class="modal fade" id="konfirmasi<?= $idpembelian; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Konfirmasi Transaksi</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="" method="post">
+                  <p>Apakah ingin mengkonfirmasi transaksi ini?</p>
+                  <input type="hidden" name="idpembelian" value="<?= $idpembelian; ?>">
+                  <button type="submit" name="verifikasi" class="btn btn-success">Konfirmasi</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- modal tolak -->
+        <div class="modal fade" id="tolak<?= $idpembelian; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Tolak Konfirmasi</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="" method="post">
+                  <p>Apakah yakin ingin menolak transaksi ini?</p>
+                  <input type="hidden" name="idproduk" value="<?= $idproduk; ?>">
+                  <input type="hidden" name="kty" value="<?= $qty; ?>">
+                  <input type="hidden" name="idpembelian" value="<?= $idpembelian; ?>">
+                  <button type="submit" class="btn btn-danger" name="tolak">Tolak</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
         <?php endwhile; ?>
       </table>
     </div>

@@ -53,11 +53,12 @@ if( isset($_SESSION["name"]) ) {
                     $stok = $row["stok"];
                     $gambar = $row["gambar"];
             ?>
-            <div class="col">
-                <div class="card" style="width: 15rem;">
-                    <img src="assets/img/<?= $gambar ?>" class="card-img-top" width="25%">
+            <div class="col g-3">
+                <div class="card h-100" style="width: 15rem;">
+                    <img src="assets/img/<?= $gambar ?>" class="card-img-top" width="100%" height="150px">
                     <div class="card-body">
                         <h5 class="card-title"><a href="detail.php?detail=<?= $id ?>"><?= $produk ?></a></h5>
+                        
                         <p class="card-text"><?= "Rp " . number_format($harga,0,',','.'); ?></p>
 
                         <?php if($super_user == true): ?>

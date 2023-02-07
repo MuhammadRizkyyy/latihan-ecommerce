@@ -170,7 +170,12 @@ if( isset($_POST["btnbukti"]) ) {
     $result2 = mysqli_query($conn, "UPDATE tb_pembelian INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian SET tb_pembelian.status = 1 WHERE tb_pembayaran.status = 1");
 
     if($result) {
-        header("Location: konfirmasi.php");
+        echo "
+            <script>
+                alert('Berhasil mrngirim bukti pembayaran! Harap tunggu beberapa saat admin akan segere mengkonfirmasi');
+                window.location.href = 'konfirmasi.php';
+            </script>
+        ";
     }
 }
 
@@ -181,6 +186,29 @@ if( isset($_POST["verifikasi"]) ) {
     if($result) {
         header("Location: konfirmasi_pembayaran_admin.php");
     }
+}
+
+if( isset($_POST["tolak"]) ) {
+    $idproduk = $_POST["idproduk"];
+    $idpembelian = $_POST["idpembelian"];
+    $kty = $_POST["kty"];
+
+    $getdatastok = mysqli_query($conn, "SELECT * FROM tb_produk WHERE id_produk = $idproduk");
+    $data = mysqli_fetch_assoc($getdatastok);
+    $stok = $data["stok"];
+    
+    $selisih = $stok + $kty;
+
+    $update = mysqli_query($conn, "UPDATE tb_produk SET stok = $selisih WHERE id_produk = $idproduk");
+
+    $hapusdata = mysqli_query($conn, "DELETE FROM tb_pembelian WHERE idpembelian = $idpembelian");
+
+    if($update && $hapusdata) {
+        header("Location: konfirmasi_pembayaran_admin.php");
+      } else {
+        echo "gagal";
+        header("Location: konfirmasi_pembayaran_admin.php");
+      }
 }
 
 function register($data) {

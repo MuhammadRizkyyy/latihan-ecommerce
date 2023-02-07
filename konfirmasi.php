@@ -48,8 +48,10 @@ $status = $data['status'];
                     <div class="card-header">Konfirmasi Pembayaran</div>
                     <div class="card-body">
                         <h1 class="text-center">
-                            <?php if(is_null($status) || $status == 1 || $status == 0): ?>
+                            <?php if(is_null($status) || $status == 0): ?>
                                 <i class="bi bi-x-lg text-danger"></i> Belum dibayar
+                            <?php elseif($status == 1): ?>
+                                <i class="bi bi-stopwatch text-warning"></i> Menunggu Konfirmasi
                             <?php elseif($status == 2): ?>
                                 <i class="bi bi-check-circle text-success"></i> Sudah dibayar
                             <?php endif; ?>
@@ -74,7 +76,7 @@ $status = $data['status'];
 
                                     if(is_null($row)) {
                                         header("Location:konfirmasi.php");
-                                     }
+                                    }
 
                                     ?>
                                     <tr>

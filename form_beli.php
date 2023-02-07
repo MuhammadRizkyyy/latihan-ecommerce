@@ -5,6 +5,10 @@ if( !isset($_SESSION["login"]) ) {
   header("Location: index.php");
 }
 
+$iduser = $_SESSION["id_user"];
+$query = mysqli_query($conn, "SELECT * FROM tb_user WHERE id_user = $iduser");
+$datauser = mysqli_fetch_assoc($query);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +51,7 @@ if( !isset($_SESSION["login"]) ) {
           <form action="" method="post">
             <div class="col-md-4">
               <label>Nama</label>
-              <input type="text" name="nama" class="form-control" required>
+              <input type="text" name="nama" class="form-control" value="<?= $datauser["username"]; ?>" readonly>
             </div>
             <div class="col-md-4">
               <label>No. KTP</label>
