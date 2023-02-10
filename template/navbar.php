@@ -18,21 +18,21 @@ if( isset($_SESSION["name"]) ) {
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="produk.php">Home</a>
         </li>
-        <?php if($super_user == false): ?>
-        <li class="nav-item">
-          <a class="nav-link active" href="konfirmasi.php">Konfirmasi</a>
-        </li>
-        <?php endif; ?>
-        <?php if($super_user == true): ?>
-        <li class="nav-item">
-          <a class="nav-link active" href="konfirmasi_pembayaran_admin.php">Konfirmasi Pembayaran</a>
-        </li>
-        <?php endif; ?>
-        <?php if($super_user == false): ?>
-        <li class="nav-item">
-          <a class="nav-link active" href="transaksi.php">Transaksi</a>
-        </li>
-        <?php endif; ?>
+          <?php if($super_user == true): ?>
+            <li class="nav-item">
+              <a class="nav-link active" href="konfirmasi_pembayaran_admin.php">Konfirmasi Pembayaran</a>
+            </li>
+          <?php endif; ?>
+          <?php if($super_user == false): ?>
+          <li class="nav-item">
+            <a class="nav-link active" href="transaksi.php">Transaksi</a>
+          </li>
+          <?php endif; ?>
+          <?php if($super_user == false): ?>
+          <li class="nav-item">
+            <a class="nav-link active" href="konfirmasi.php">Konfirmasi</a>
+          </li>
+          <?php endif; ?>
       </ul>
         <a href="logout.php" class="btn btn-outline-primary text-dark" type="submit">Logout</a>
     </div>

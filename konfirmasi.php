@@ -32,6 +32,16 @@ $status = $data['status'];
     <div class="container">
         <div class="row justify-content-center my-4">
             <div class="col-md-6">
+            <?php 
+            if(isset($_GET["p"])) {
+                $pesan = $_GET["p"];
+
+                echo '<div class="alert alert-secondary alert-dismissible fade show my-3" role="alert">
+                <strong>'.$pesan.'</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+            }
+        ?>
                 <div class="card">
                     <div class="card-header bg-info">Konfirmasi Pembayaran</div>
                     <div class="card-body">

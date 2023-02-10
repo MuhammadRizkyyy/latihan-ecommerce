@@ -1,7 +1,14 @@
 <?php
 session_start();
 $conn = mysqli_connect("localhost", "root", "", "db_latihan") or die("gagal koneksi");
-$error = "";
+
+// untuk cek apakah yg login admin atau user biasa
+$super_user = false;
+if( isset($_SESSION["name"]) ) {
+  if( cek_status($_SESSION["name"]) == 1 ) {
+    $super_user = true;
+  }
+}
 
 function upload() {
     $nama_file = $_FILES["gambar"]["name"];
@@ -9,11 +16,6 @@ function upload() {
     $ukuran_file = $_FILES["gambar"]["size"];
     $error = $_FILES["gambar"]["error"];
     $tmp_file = $_FILES["gambar"]["tmp_name"];
-
-    // cek apakah ada gambar atau tidak
-    if( $error == 4 ) {
-        return 'nopoto.png';
-    }
 
     // cek ekstensi file
     $daftar_gambar = ["jpg", "jpeg", "png"];
@@ -64,8 +66,7 @@ if( isset($_POST["btntambahproduk"]) ) {
     $result = mysqli_query($conn, "INSERT INTO tb_produk (judul_produk, harga, stok, deskripsi, gambar) VALUES ('$title_produk', '$harga', '$stok', '$deskripsi', '$gambar')");
 
     if($result) {
-        $error = "BERHASIL MELAKUKAN TAMBAH PRODUK";
-        header("Location: produk.php");
+        header("Location: produk.php?p=Berhasil ditambah!");
     }
 
 }
@@ -77,7 +78,7 @@ if( isset($_POST["btnhapusproduk"]) ) {
     $result = mysqli_query($conn, "DELETE FROM tb_produk WHERE id_produk = $id");
 
     if($result) {
-        header("Location: produk.php");
+        header("Location: produk.php?p=Berhasil dihapus");
     }
 
 }
@@ -88,12 +89,19 @@ if( isset($_POST["btneditproduk"]) ){
     $title_produk = $_POST["produk"];
     $harga = $_POST["harga"];
     $stok = $_POST["stok"];
-    $gambar = upload();
+    $gambar_lama = $_POST["gambar_lama"];
 
+    if($_FILES["gambar"]["error"] == 4) {
+        $gambar = $gambar_lama;
+    } else {
+        $gambar = upload();
+    }
+
+    
     $result = mysqli_query($conn, "UPDATE tb_produk SET judul_produk = '$title_produk', harga = '$harga', stok = '$stok', gambar = '$gambar'  WHERE id_produk = $id");
 
     if($result) {
-        header("Location: produk.php");
+        header("Location: produk.php?p=Berhasil mengedit");
     }
 
 }
@@ -170,12 +178,7 @@ if( isset($_POST["btnbukti"]) ) {
     $result2 = mysqli_query($conn, "UPDATE tb_pembelian INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian SET tb_pembelian.status = 1 WHERE tb_pembayaran.status = 1");
 
     if($result) {
-        echo "
-            <script>
-                alert('Berhasil mrngirim bukti pembayaran! Harap tunggu beberapa saat admin akan segere mengkonfirmasi');
-                window.location.href = 'konfirmasi.php';
-            </script>
-        ";
+        header("Location: konfirmasi.php?p=Berhasil kirim bukti pembayaran, dimohon untuk kesabarannya");
     }
 }
 
@@ -184,7 +187,7 @@ if( isset($_POST["verifikasi"]) ) {
     $result = mysqli_query($conn, "UPDATE tb_pembelian INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian SET tb_pembelian.status = 2, tb_pembayaran.status = 2 WHERE tb_pembayaran.idpembelian = $idpembelian");
 
     if($result) {
-        header("Location: konfirmasi_pembayaran_admin.php");
+        header("Location: konfirmasi_pembayaran_admin.php?p=Berhasil melakukan konfirmasi transaksi");
     }
 }
 
@@ -204,7 +207,7 @@ if( isset($_POST["tolak"]) ) {
     $hapusdata = mysqli_query($conn, "DELETE FROM tb_pembelian WHERE idpembelian = $idpembelian");
 
     if($update && $hapusdata) {
-        header("Location: konfirmasi_pembayaran_admin.php");
+        header("Location: konfirmasi_pembayaran_admin.php?p=Anda telah menolak konfirmasi transaksi");
       } else {
         echo "gagal";
         header("Location: konfirmasi_pembayaran_admin.php");

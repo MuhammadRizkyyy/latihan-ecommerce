@@ -5,13 +5,6 @@ if( !isset($_SESSION["login"]) ) {
     header("Location: index.php");
 }
 
-$super_user = false;
-if( isset($_SESSION["name"]) ) {
-    $user = true;
-  if( cek_status($_SESSION["name"]) == 1 ) {
-    $super_user = true;
-  }
-}
 
 ?>
 
@@ -24,24 +17,44 @@ if( isset($_SESSION["name"]) ) {
     <title>Produk</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+        .produk {
+            color: black;
+            text-decoration: none;
+        }
+        .kartu {
+            -webkit-box-shadow: 0px 0px 13px -3px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 0px 13px -3px rgba(0,0,0,0.75);
+            box-shadow: 0px 0px 13px -3px rgba(0,0,0,0.75);
+        }
+    </style>
 </head>
 <body>
     
 <?php include "template/navbar.php"; ?>
 
     
-    
 
     <div class="container">
+        <?php include "template/carousel.php"; ?>
         <?php if($super_user == true): ?>
-            <h3>Tambah Produk</h3>
+            <h3 class="mt-4">Tambah Produk</h3>
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahproduk">
             Tambah Produk
             </button>
         <?php endif; ?>
 
-        <h5><?= $error; ?></h5>
+        <?php 
+            if(isset($_GET["p"])) {
+                $pesan = $_GET["p"];
+
+                echo '<div class="alert alert-secondary alert-dismissible fade show my-3" role="alert">
+                <strong>'.$pesan.'</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+            }
+        ?>
 
         <div class="row">
             <?php 
@@ -54,10 +67,10 @@ if( isset($_SESSION["name"]) ) {
                     $gambar = $row["gambar"];
             ?>
             <div class="col g-3">
-                <div class="card h-100" style="width: 15rem;">
+                <div class="card h-100 border-0 kartu" style="width: 15rem;">
                     <img src="assets/img/<?= $gambar ?>" class="card-img-top" width="100%" height="150px">
                     <div class="card-body">
-                        <h5 class="card-title"><a href="detail.php?detail=<?= $id ?>"><?= $produk ?></a></h5>
+                        <h5 class="card-"><a href="detail.php?detail=<?= $id ?>" class="produk"><?= $produk ?></a></h5>
                         
                         <p class="card-text"><?= "Rp " . number_format($harga,0,',','.'); ?></p>
 
@@ -112,6 +125,7 @@ if( isset($_SESSION["name"]) ) {
                                 <input type="number" value="<?= $stok ?>"  name="stok" class="form-control" required><br>
                                 <img src="assets/img/<?= $gambar ?>" class="card-img-top"><br><br>
                                 <input type="file" value="<?= $gambar ?>" name="gambar" class="form-control"><br>
+                                <input type="hidden" name="gambar_lama" value="<?= $gambar; ?>">
                                 <input type="hidden" name="idproduk" value="<?= $id ?>">
                         </div>
                         <div class="modal-footer">

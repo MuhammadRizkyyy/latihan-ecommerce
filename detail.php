@@ -46,7 +46,9 @@ if( !isset($_SESSION["login"]) ) {
                                 <h4><?= "Rp " . number_format($harga,0,',','.'); ?></h4>
                                 <p><strong>Stok: <?= $stok; ?></strong></p>
                                 <p><?= $deskripsi; ?></p>
-                                <a href="form_beli.php?beli=<?= $id; ?>" class="btn btn-primary" name="btnbeli">Beli</a>
+                                <?php if($super_user == false): ?>
+                                    <a href="form_beli.php?beli=<?= $id; ?>" class="btn btn-primary" name="btnbeli">Beli</a>
+                                <?php endif; ?>
                             </div>
                             <?php endwhile; ?>
                         </div>

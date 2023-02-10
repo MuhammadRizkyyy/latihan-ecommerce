@@ -19,6 +19,16 @@ require "functions/functions.php";
   <?php include "template/navbar.php"; ?>
 
   <div class="container">
+    <?php 
+    if(isset($_GET["p"])) {
+        $pesan = $_GET["p"];
+
+        echo '<div class="alert alert-secondary alert-dismissible fade show my-3" role="alert">
+        <strong>'.$pesan.'</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>';
+    }
+    ?>
     <h3 class="text-center my-3">Daftar konfirmasi pembayaran</h3>
 
     <div class="table-responsive">
