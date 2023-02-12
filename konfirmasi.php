@@ -10,7 +10,8 @@ if( isset($_POST["cek"]) ) {
 
 $kode = $_GET['kode'];
 
-$result = mysqli_query($conn, "SELECT * FROM `tb_pembelian` INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian WHERE tb_pembelian.kode_pembayaran='$kode'");
+// query untuk mengecek kode pembayaran 
+$result = mysqli_query($conn, "SELECT * FROM `tb_pembelian` INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian WHERE tb_pembelian.kode_pembayaran='$kode' ORDER BY tb_pembayaran.id DESC");
 $data = mysqli_fetch_assoc($result);
 $status = $data['status'];
 ?>
@@ -58,14 +59,21 @@ $status = $data['status'];
                     <div class="card-header">Konfirmasi Pembayaran</div>
                     <div class="card-body">
                         <h1 class="text-center">
-                            <?php if(is_null($status) || $status == 0): ?>
+                            <?php if($status == 0): ?>
                                 <i class="bi bi-x-lg text-danger"></i> Belum dibayar
-                            <?php elseif($status == 1): ?>
+                            <?php elseif(is_null($status) || $status == 1): ?>
                                 <i class="bi bi-stopwatch text-warning"></i> Menunggu Konfirmasi
                             <?php elseif($status == 2): ?>
                                 <i class="bi bi-check-circle text-success"></i> Sudah dibayar
+                            <?php elseif($status == 3): ?>
+                                <i class="bi bi-x-lg text-danger"></i> Ditolak
                             <?php endif; ?>
                         </h1>
+                        <?php if($status == 3): ?>
+                            <div class="alert alert-danger">
+                                <p><strong>Harap Mengirim Bukti Pembayaran yang Jelas dan Benar</strong></p>
+                            </div>
+                        <?php endif; ?>
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <tr>

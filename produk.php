@@ -33,9 +33,7 @@ if( !isset($_SESSION["login"]) ) {
     
 <?php include "template/navbar.php"; ?>
 
-    
-
-    <div class="container">
+    <div class="container mb-5">
         <?php include "template/carousel.php"; ?>
         <?php if($super_user == true): ?>
             <h3 class="mt-4">Tambah Produk</h3>
@@ -65,6 +63,7 @@ if( !isset($_SESSION["login"]) ) {
                     $harga = $row["harga"];
                     $stok = $row["stok"];
                     $gambar = $row["gambar"];
+                    $deskripsi = $row["deskripsi"];
             ?>
             <div class="col g-3">
                 <div class="card h-100 border-0 kartu" style="width: 15rem;">
@@ -123,8 +122,9 @@ if( !isset($_SESSION["login"]) ) {
                                 <input type="text" value="<?= $produk ?>" name="produk" class="form-control" required><br>
                                 <input type="text" value="<?= $harga ?>" name="harga" class="form-control" required><br>
                                 <input type="number" value="<?= $stok ?>"  name="stok" class="form-control" required><br>
-                                <img src="assets/img/<?= $gambar ?>" class="card-img-top"><br><br>
-                                <input type="file" value="<?= $gambar ?>" name="gambar" class="form-control"><br>
+                                <textarea name="deskripsi" cols="30" rows="10" class="form-control"><?= $deskripsi ?></textarea><br>
+                                <img src="assets/img/<?= $gambar ?>" class="card-img-top img-preview" width="100%" height="200px"><br><br>
+                                <input type="file" value="<?= $gambar ?>" name="gambar" class="form-control gambar" onchange="preview()"><br>
                                 <input type="hidden" name="gambar_lama" value="<?= $gambar; ?>">
                                 <input type="hidden" name="idproduk" value="<?= $id ?>">
                         </div>
@@ -155,8 +155,8 @@ if( !isset($_SESSION["login"]) ) {
                         <input type="text" placeholder="Nama Produk" name="produk" class="form-control" required><br>
                         <input type="text" placeholder="Harga" name="harga" class="form-control" required><br>
                         <input type="number" placeholder="Stok" name="stok" class="form-control" required><br>
-                        <input type="text" placeholder="Deskripsi" name="deskripsi" class="form-control" required><br>
-                        <input type="file" name="gambar" class="form-control" required><br>
+                        <textarea name="deskripsi" placeholder="Deskripsi" cols="30" rows="10" class="form-control"></textarea><br>
+                        <input type="file" name="gambar" class="form-control" required>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" name="btntambahproduk">Tambah</button>
@@ -168,6 +168,19 @@ if( !isset($_SESSION["login"]) ) {
 
 
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        function preview() {
+            const gambar = document.querySelector('.gambar');
+            const imgpreview = document.querySelector('.img-preview');
+            const oFReader = new FileReader();
+
+            oFReader.readAsDataURL(gambar.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgpreview.src = oFREvent.target.result;
+            };
+        }
+    </script>
 
 </body>
 </html>

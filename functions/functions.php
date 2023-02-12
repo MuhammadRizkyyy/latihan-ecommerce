@@ -177,6 +177,7 @@ if( isset($_POST["btnbukti"]) ) {
 
     $result2 = mysqli_query($conn, "UPDATE tb_pembelian INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian SET tb_pembelian.status = 1 WHERE tb_pembayaran.status = 1");
 
+
     if($result) {
         header("Location: konfirmasi.php?p=Berhasil kirim bukti pembayaran, dimohon untuk kesabarannya");
     }
@@ -184,6 +185,7 @@ if( isset($_POST["btnbukti"]) ) {
 
 if( isset($_POST["verifikasi"]) ) {
     $idpembelian = $_POST["idpembelian"];
+
     $result = mysqli_query($conn, "UPDATE tb_pembelian INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian SET tb_pembelian.status = 2, tb_pembayaran.status = 2 WHERE tb_pembayaran.idpembelian = $idpembelian");
 
     if($result) {
@@ -192,26 +194,13 @@ if( isset($_POST["verifikasi"]) ) {
 }
 
 if( isset($_POST["tolak"]) ) {
-    $idproduk = $_POST["idproduk"];
     $idpembelian = $_POST["idpembelian"];
-    $kty = $_POST["kty"];
 
-    $getdatastok = mysqli_query($conn, "SELECT * FROM tb_produk WHERE id_produk = $idproduk");
-    $data = mysqli_fetch_assoc($getdatastok);
-    $stok = $data["stok"];
-    
-    $selisih = $stok + $kty;
+    $result = mysqli_query($conn, "UPDATE tb_pembelian INNER JOIN tb_pembayaran ON tb_pembelian.idpembelian = tb_pembayaran.idpembelian SET tb_pembelian.status = 3, tb_pembayaran.status = 3 WHERE tb_pembayaran.idpembelian = $idpembelian");
 
-    $update = mysqli_query($conn, "UPDATE tb_produk SET stok = $selisih WHERE id_produk = $idproduk");
-
-    $hapusdata = mysqli_query($conn, "DELETE FROM tb_pembelian WHERE idpembelian = $idpembelian");
-
-    if($update && $hapusdata) {
-        header("Location: konfirmasi_pembayaran_admin.php?p=Anda telah menolak konfirmasi transaksi");
-      } else {
-        echo "gagal";
-        header("Location: konfirmasi_pembayaran_admin.php");
-      }
+    if($result) {
+        header("Location: konfirmasi_pembayaran_admin.php?p=Berhasil menolak transaksi");
+    }
 }
 
 function register($data) {
