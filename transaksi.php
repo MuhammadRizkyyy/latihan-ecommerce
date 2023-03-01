@@ -39,8 +39,10 @@ $result = mysqli_query($conn, "SELECT * FROM `tb_pembelian` INNER JOIN tb_produk
           $statustext = "";
           if($status == 1 || $status == 0) {
             $statustext = "Belum di Konfirmasi";
-          } else {
+          } else if($status == 2) {
             $statustext = "Sudah di Konfirmasi";
+          } else if($status == 3) {
+            $statustext = "Konfirmasi di tolak";
           }
           
         ?>

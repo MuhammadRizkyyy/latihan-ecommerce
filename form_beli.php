@@ -82,7 +82,7 @@ $datauser = mysqli_fetch_assoc($query);
               </div>
             </div>
               <?php
-                $result = mysqli_query($conn, "SELECT * FROM tb_produk WHERE id = $id");
+                $result = mysqli_query($conn, "SELECT * FROM tb_produk WHERE id_produk = $id");
 
                 $name = $_SESSION["name"];
                 $ambiliduser = mysqli_query($conn, "SELECT id_user FROM tb_user WHERE username = '$name'");

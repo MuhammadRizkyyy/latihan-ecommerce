@@ -38,7 +38,7 @@ if( !isset($_SESSION["login"]) ) {
                             ?>
                             <!-- kiri -->
                             <div class="col-md-6">
-                                <img src="assets/img/<?= $gambar ?>" alt="">
+                                <img src="assets/img/<?= $gambar ?>" alt="gambar printer" width="100%" height="200px">
                             </div>
                             <!-- kanan -->
                             <div class="col-md-6">
